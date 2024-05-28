@@ -1,16 +1,13 @@
-#include <string.h>
-#include <Servo.h>
-
 
 // Declare struct
-  struct MessageValue {
+struct MessageValue {
   String message;
   String value;
-  };
+};
 
 
 // Declare function that parse message format
-  struct MessageValue getMessage(String inputtedStr) {
+struct MessageValue getMessage(String inputtedStr) {
   struct MessageValue result;
 
   char charArr[50];
@@ -34,13 +31,16 @@ struct MessageValue receivedData;
 
 
 //Variables
-const int ledPin = 3;    // the number of the LED pin
+int ledPin = 12;  // the number of the LED pin
+int potiPin = A2;
+int sensorwert = 0;
 
 
 void setup() {
 
   // initialize the LED pin as an output:
   pinMode(ledPin, OUTPUT);
+  pinMode(potiPin, INPUT);
 
   // Setup Serial Monitor
   Serial.begin(9600);
@@ -49,15 +49,19 @@ void setup() {
 void loop() {
 
   //Do something with recieved data from ProtoPie Connect
-  while (Serial.available() > 0) { // Take out strings until Serial is empty
-      String receivedString = Serial.readStringUntil('\0'); // From 1.9.0 version, We can use '\0' as delimiter in Arduino Serial
-      receivedData = getMessage(receivedString);
-    }
+  while (Serial.available() > 0) {                         // Take out strings until Serial is empty
+    String receivedString = Serial.readStringUntil('\0');  // From 1.9.0 version, We can use '\0' as delimiter in Arduino Serial
+    receivedData = getMessage(receivedString);
+  }
 
-    if (receivedData.message.equals("FIRST")) {
+  if (receivedData.message.equals("SLIDER")) {
     analogWrite(ledPin, receivedData.value.toInt());
-    delay(30);
-    }
-  
-  
+  }
+
+  //Send something to ProtoPie Connect
+  sensorwert = analogRead(potiPin);
+  sensorwert = map(sensorwert, 0, 1023, 0, 100);
+  Serial.println("opacityvalue||" + String(sensorwert));
+
+  delay(5);
 }
