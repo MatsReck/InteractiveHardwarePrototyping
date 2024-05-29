@@ -17,6 +17,8 @@ void setup() {
 void loop() {
 
   //Send something to ProtoPie Connect
+  curButtonState = digitalRead(buttonPin);
+  
   if (curButtonState != lastButtonState) {
     lastButtonState = curButtonState;
 

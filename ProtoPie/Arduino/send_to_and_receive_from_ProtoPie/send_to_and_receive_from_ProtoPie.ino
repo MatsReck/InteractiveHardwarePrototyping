@@ -56,7 +56,7 @@ void loop() {
   // To send something to ProtoPie
   String send_key = "Helligkeit";
   int send_value = 200;
-  Serial.println(String(send_key) + String(send_value));
+  Serial.println(String(send_key) + "||" + String(send_value));
 
   // Good-to-have
   delay(5);
