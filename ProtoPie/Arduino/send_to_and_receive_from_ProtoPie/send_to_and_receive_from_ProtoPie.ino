@@ -1,9 +1,13 @@
+/* ==================================================
+----------- To get a Message From ProtoPie ---------
+====================================================*/
+// DO NOT CHANGE THIS - Just Copy & Paste it
+
 // Declare struct
 struct MessageValue {
   String message;
   String value;
 };
-
 
 // Declare function that parse message format
 struct MessageValue getMessage(String inputtedStr) {
@@ -27,26 +31,33 @@ struct MessageValue getMessage(String inputtedStr) {
 
 // Declare MessageValue struct's instance
 struct MessageValue receivedData;
-const int ledPin = 12;    // the number of the LED pin
+
+/*====================================================*/
+
 
 void setup() {
-  pinMode(ledPin, OUTPUT);
+  // Initialize the Serial Connection
   Serial.begin(9600);
-  // initialize the LED pin as an output
-  // Setup Serial Monitor
 }
 
 void loop() {
 
-  //Do something with recieved data from ProtoPie Connect
-
-  while (Serial.available() > 0) {  // Take out strings until Serial is empty
+  // To read a message from ProtoPie
+  while (Serial.available() > 0) {
     String receivedString = Serial.readStringUntil('\0');
     receivedData = getMessage(receivedString);
   }
+  // Here is your received Data from ProtoPie
+  String receivced_key = receivedData.message;
+  int receivced_value = receivedData.value.toInt();
 
-  if (receivedData.message.equals("SLIDER")) {
-    analogWrite(ledPin, receivedData.value.toInt());
-    delay(30);
-  }
+  
+
+  // To send something to ProtoPie
+  String send_key = "Helligkeit";
+  int send_value = 200;
+  Serial.println(String(send_key) + String(send_value));
+
+  // Good-to-have
+  delay(5);
 }
